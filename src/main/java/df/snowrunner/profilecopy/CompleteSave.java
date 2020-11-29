@@ -36,7 +36,7 @@ public class CompleteSave {
     ObjectMapper mapper = new ObjectMapper();
     JsonNode node = mapper.readTree(jsonString);
     if (node.get("cfg_version").asText()!="1") {
-      throw new Exception("Configversion is not 1!");
+      throw new IllegalStateException("Configversion is not 1!");
     }
     
     // Populate fields.
