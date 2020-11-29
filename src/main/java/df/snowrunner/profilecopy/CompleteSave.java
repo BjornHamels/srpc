@@ -12,13 +12,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class CompleteSave {
 
-  public Integer money;
-  public Integer xp;
-  public Integer rank;
-  public Integer numberOfTrucks;
-  public String filename;
-  public Boolean firstGarage;
-  public String lastLoaded;
+  private Integer money;
+  private Integer xp;
+  private Integer rank;
+  private Integer numberOfTrucks;
+  private String filename;
+  private Boolean firstGarage;
+  private String lastLoaded;
 
   /**
    * Constructs the CompleteSave by loading the associated savegame.
