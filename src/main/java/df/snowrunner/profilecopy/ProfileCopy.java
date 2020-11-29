@@ -48,10 +48,8 @@ public final class ProfileCopy {
       }
 
       System.out.println("\n[!!] Review the information below. To confirm, enter the number " + check + "!");
-      System.out.println("SOURCE " + source.toString());
-      System.out.println("DESTINATION " + destination.toString());
-      System.out.println("SOURCE      " + source.formatted());
-      System.out.println("DESTINATION " + destination.formatted());
+      System.out.println("SOURCE      " + source.formatted()      + "   >---this profile---\\   This file is unaffected.");
+      System.out.println("DESTINATION " + destination.formatted() + "   <---goes here------/   This file loses the profile.");
       i = scanIn.nextInt();
       
       if (i == check) {
