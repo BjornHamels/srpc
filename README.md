@@ -8,6 +8,10 @@ When playing SnowRunner with friends who whomever hosts the multiplayer game on 
 Other players that join can select their stored trucks on the custom map.
 This copier makes it so the host is no longer penalized by copying all stored trucks over to the new savegame.
 
+## Backups
+
+This program backs up all files it changes. But it is best that you create your own backups before using this tool. (At your own risk I might add!)
+
 ## Example usage
 
 Below is an example of the use.
