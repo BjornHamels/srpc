@@ -6,18 +6,49 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class ProfileCopy {
 
   public static void main(String[] args) {
+    Scanner scanIn = new Scanner( System.in );
     CompleteSave source, destination;
-    Integer i = 0;
+    Integer check = ThreadLocalRandom.current().nextInt(1000, 10000);
+    Integer i = 1;
+
     try {
+
+      System.out.println("\n[!!] Found the following savegame files. Please review them carefully!");
       String path = findSavegameFolder();
       List<CompleteSave> saves = openAllSavegames(path);
       for (CompleteSave cs: saves) {
         System.out.format("%2d %s\n", i++, cs.formatted());
       }
+
+      System.out.print("\n[??] Input the SOURCE of the profile. Enter the linenumber.\nSOURCE: ");
+      i = scanIn.nextInt();
+      source = saves.get(i - 1);
+
+      System.out.print("\n[??] Now input the DESTINATION of the savegame to get the profile form the source. Enter the linenumber.\nDESTINATION: ");
+      i = scanIn.nextInt();
+      destination = saves.get(i - 1);
+      if (source == destination) {
+        throw new IllegalArgumentException("Source and destination cannot be the same!");
+      }
+
+      System.out.println("\n[!!] Review the information below. To confirm, enter the number " + check + "!");
+      System.out.println("SOURCE " + source.toString());
+      System.out.println("DESTINATION " + source.toString());
+      System.out.println("SOURCE      " + source.formatted());
+      System.out.println("DESTINATION " + source.formatted());
+      i = scanIn.nextInt();
+      if (i == check) {
+        System.out.println("DAAR GAAN WE!");
+      } else {
+        System.out.println("\nAborted.");
+      }
+
     } catch(Throwable t) {
       System.out.println("An error occured!");
       t.printStackTrace();
@@ -39,7 +70,7 @@ public final class ProfileCopy {
       }
     });
     if (candidates.length == 0) {
-      throw new Exception("No savegames found!");
+      throw new IllegalStateException("No savegames found!");
     }
     for (String name: candidates) {
       saves.add(new CompleteSave(path, name));
@@ -66,7 +97,7 @@ public final class ProfileCopy {
       }
     });
     if (candidates.length != 1) {
-      throw new Exception("Multiple candidates " + Arrays.toString(candidates) + " found in " + storage);
+      throw new IllegalStateException("Multiple candidates " + Arrays.toString(candidates) + " found in " + storage);
     }
     return storage + "\\" + candidates[0] + "\\";
   }
