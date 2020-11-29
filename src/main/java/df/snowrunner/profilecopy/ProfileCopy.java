@@ -10,7 +10,8 @@ public final class ProfileCopy {
   public static void main(String[] args) {
     try {
       String dir = findSavegameFolder();
-      System.out.println(dir);
+      CompleteSave cs = new CompleteSave(dir, "CompleteSave.dat");
+      System.out.println(cs.toString());
     } catch(Throwable t) {
       System.out.println("An error occured!");
       t.printStackTrace();
