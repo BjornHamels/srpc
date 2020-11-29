@@ -52,6 +52,10 @@ public class CompleteSave {
     rank = profile.get("rank").asInt();
   }
 
+  /**
+   * Returns a fixed length formatted string of the savegame.
+   * @return fixed length formatted representational string.
+   */
   public String formatted() {
     return String.format("|%-17.17s|%17.17s|%3dr|%8dxp|%8d$|%4dgtrs|", filename, lastLoaded, rank, xp, money, numberOfTrucks);
   }
