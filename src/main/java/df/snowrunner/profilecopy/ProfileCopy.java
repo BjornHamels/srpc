@@ -3,19 +3,29 @@ package df.snowrunner.profilecopy;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 public final class ProfileCopy {
 
+  /**
+   * Here we go. Our entrypoint.
+   * @param args none are used.
+   */
   public static void main(String[] args) {
     Scanner scanIn = new Scanner( System.in );
     CompleteSave source, destination;
-    Integer check = ThreadLocalRandom.current().nextInt(1000, 10000);
-    Integer i = 1;
+    int check = ThreadLocalRandom.current().nextInt(1000, 10000);
+    int i = 1;
 
     try {
 
@@ -39,18 +49,26 @@ public final class ProfileCopy {
 
       System.out.println("\n[!!] Review the information below. To confirm, enter the number " + check + "!");
       System.out.println("SOURCE " + source.toString());
-      System.out.println("DESTINATION " + source.toString());
+      System.out.println("DESTINATION " + destination.toString());
       System.out.println("SOURCE      " + source.formatted());
-      System.out.println("DESTINATION " + source.formatted());
+      System.out.println("DESTINATION " + destination.formatted());
       i = scanIn.nextInt();
+      
       if (i == check) {
-        System.out.println("DAAR GAAN WE!");
+        System.out.println("\n[!!] Backing up and injecting the profile from source into destination.");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        Path sourceFile = Paths.get(source.getFilePathAndFileName());
+        Path destinationFile = Paths.get(source.getFilePathAndFileName() + "." + sdf.format(new Date()) + ".backup");
+        Files.copy(sourceFile, destinationFile, StandardCopyOption.REPLACE_EXISTING);
+        
+        // TODO: source.injectProfile(destionation)!
+        System.out.println("\n[<3] DONE.");
       } else {
-        System.out.println("\nAborted.");
+        System.out.format("\n[!!] Aborted (%d!=%d).", i, check);
       }
 
     } catch(Throwable t) {
-      System.out.println("An error occured!");
+      System.out.println("\n[:(] An error occured!");
       t.printStackTrace();
     } finally {
       scanIn.close();

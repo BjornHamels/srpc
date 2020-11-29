@@ -12,11 +12,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class CompleteSave {
 
-  private Integer money;
-  private Integer xp;
-  private Integer rank;
-  private Integer numberOfTrucks;
-  private String filename;
+  private int money;
+  private int xp;
+  private int rank;
+  private int numberOfTrucks;
+  private String fileName;
+  private String path;
   private Boolean firstGarage;
   private String lastLoaded;
 
@@ -27,7 +28,9 @@ public class CompleteSave {
    * @throws Throwable at error.
    */
   public CompleteSave(String path, String fileName) throws Throwable {
-    
+    this.path = path;
+    this.fileName = fileName;
+
     // Read file.
     byte[] encoded = Files.readAllBytes(Paths.get(path + fileName));
     String jsonString = new String(encoded, StandardCharsets.UTF_8);
@@ -40,7 +43,6 @@ public class CompleteSave {
     }
     
     // Populate fields.
-    this.filename = fileName;
     String objectName = fileName.substring(0, fileName.indexOf("."));
     JsonNode sslValue = node.get(objectName).get("SslValue");
     firstGarage = sslValue.get("isFirstGarageDiscovered").asInt() == 1;
@@ -57,7 +59,15 @@ public class CompleteSave {
    * @return fixed length formatted representational string.
    */
   public String formatted() {
-    return String.format("|%-17.17s|%17.17s|%3dr|%8dxp|%8d$|%4dgtrs|", filename, lastLoaded, rank, xp, money, numberOfTrucks);
+    return String.format("|%-17.17s|%17.17s|%3dr|%8dxp|%8d$|%4dgtrs|", fileName, lastLoaded, rank, xp, money, numberOfTrucks);
+  }
+
+  /**
+   * Returns the path plus filename.
+   * @return path plus filename.
+   */
+  public String getFilePathAndFileName() {
+    return path + fileName;
   }
 
   /**
@@ -65,7 +75,7 @@ public class CompleteSave {
    */
   @Override
   public String toString() {
-    return filename + " has a profile rank of " + rank + " that earned " + xp + " expericene with " + money +"$ in the wallet, and " + numberOfTrucks
+    return fileName + " has a profile rank of " + rank + " that earned " + xp + " expericene with " + money +"$ in the wallet, and " + numberOfTrucks
       + " trucks in garage. " + (firstGarage ? "This file can host the " + lastLoaded + " multiplayer game." : "This file is unable to host the " + lastLoaded + " multiplayer game!") ;
   }
 
