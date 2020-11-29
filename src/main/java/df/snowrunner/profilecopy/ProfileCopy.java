@@ -57,12 +57,15 @@ public final class ProfileCopy {
       if (i == check) {
         System.out.println("\n[!!] Backing up and injecting the profile from source into destination.");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        Path sourceFile = Paths.get(source.getFilePathAndFileName());
-        Path destinationFile = Paths.get(source.getFilePathAndFileName() + "." + sdf.format(new Date()) + ".backup");
+        Path sourceFile = Paths.get(destination.getFilePathAndFileName()); // Confusing line, but it is correct.
+        Path destinationFile = Paths.get(destination.getFilePathAndFileName() + "." + sdf.format(new Date()) + ".backup");
         Files.copy(sourceFile, destinationFile, StandardCopyOption.REPLACE_EXISTING);
         
-        // TODO: source.injectProfile(destionation)!
-        System.out.println("\n[<3] DONE.");
+        destination.injectProfileFrom(source);
+        destination.overwriteSave();
+
+        System.out.println("\n[<3] DONE. Press enter.");
+        scanIn.next();
       } else {
         System.out.format("\n[!!] Aborted (%d!=%d).", i, check);
       }

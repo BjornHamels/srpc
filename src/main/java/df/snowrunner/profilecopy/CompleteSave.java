@@ -1,11 +1,14 @@
 package df.snowrunner.profilecopy;
 
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * This contains a view on the savegame file. Named after the savegame filename of SnowRunner.
@@ -20,6 +23,10 @@ public class CompleteSave {
   private String path;
   private Boolean firstGarage;
   private String lastLoaded;
+  private JsonNode profile;
+  private JsonNode root;
+  private JsonNode sslValue;
+  private String objectName;
 
   /**
    * Constructs the CompleteSave by loading the associated savegame.
@@ -37,17 +44,17 @@ public class CompleteSave {
 
     // Parse file.
     ObjectMapper mapper = new ObjectMapper();
-    JsonNode node = mapper.readTree(jsonString);
-    if (node.get("cfg_version").asText()!="1") {
+    root = mapper.readTree(jsonString);
+    if (root.get("cfg_version").asText() != "1") {
       throw new IllegalStateException("Configversion is not 1!");
     }
     
     // Populate fields.
-    String objectName = fileName.substring(0, fileName.indexOf("."));
-    JsonNode sslValue = node.get(objectName).get("SslValue");
+    objectName = fileName.substring(0, fileName.indexOf("."));
+    sslValue = root.get(objectName).get("SslValue");
     firstGarage = sslValue.get("isFirstGarageDiscovered").asInt() == 1;
     lastLoaded = sslValue.get("lastLoadedLevel").asText();
-    JsonNode profile = sslValue.get("persistentProfileData");
+    profile = sslValue.get("persistentProfileData");
     numberOfTrucks = profile.get("trucksInWarehouse").size();
     money = profile.get("money").asInt();
     xp = profile.get("experience").asInt();
@@ -68,6 +75,23 @@ public class CompleteSave {
    */
   public String getFilePathAndFileName() {
     return path + fileName;
+  }
+
+  /**
+   * Injects `other` profiledata into our JsonNode tree. Other is not changed, `this` is. The internal fields are dirty after calling this method.
+   * @param other the source to get the profile data from.
+   */
+  public void injectProfileFrom(CompleteSave other) {
+    ((ObjectNode) sslValue).set("persistentProfileData", other.profile);
+  }
+  
+  /**
+   * Overwrites the safegame with the data of the root node.
+   */
+  public void overwriteSave() throws Throwable {
+    try (PrintStream out = new PrintStream(new FileOutputStream(path + fileName))) {
+      out.print(root.toString());
+    }
   }
 
   /**
