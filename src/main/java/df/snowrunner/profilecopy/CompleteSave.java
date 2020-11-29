@@ -7,7 +7,9 @@ import java.nio.file.Paths;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
+/**
+ * This contains a view on the savegame file. Named after the savegame filename of SnowRunner.
+ */
 public class CompleteSave {
 
   public Integer money;
@@ -18,7 +20,12 @@ public class CompleteSave {
   public Boolean firstGarage;
   public String lastLoaded;
 
-  
+  /**
+   * Constructs the CompleteSave by loading the associated savegame.
+   * @param path the path to the savegame file.
+   * @param fileName savegame file name is passed seperately as it is also the json node name.
+   * @throws Throwable at error.
+   */
   public CompleteSave(String path, String fileName) throws Throwable {
     
     // Read file.
@@ -45,6 +52,9 @@ public class CompleteSave {
     rank = profile.get("rank").asInt();
   }
 
+  /**
+   * Human readable representation of the savegame involved.
+   */
   @Override
   public String toString() {
     return filename + " has a profile rank of " + rank.toString() + " that earned " + xp.toString() + " expericene with " + money.toString() +"$ in the wallet, and " + numberOfTrucks
