@@ -52,6 +52,8 @@ public final class ProfileCopy {
     } catch(Throwable t) {
       System.out.println("An error occured!");
       t.printStackTrace();
+    } finally {
+      scanIn.close();
     }
   }
   
