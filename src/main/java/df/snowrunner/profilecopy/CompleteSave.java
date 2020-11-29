@@ -52,12 +52,16 @@ public class CompleteSave {
     rank = profile.get("rank").asInt();
   }
 
+  public String formatted() {
+    return String.format("|%-17.17s|%17.17s|%3dr|%8dxp|%8d$|%4dgtrs|", filename, lastLoaded, rank, xp, money, numberOfTrucks);
+  }
+
   /**
    * Human readable representation of the savegame involved.
    */
   @Override
   public String toString() {
-    return filename + " has a profile rank of " + rank.toString() + " that earned " + xp.toString() + " expericene with " + money.toString() +"$ in the wallet, and " + numberOfTrucks
+    return filename + " has a profile rank of " + rank + " that earned " + xp + " expericene with " + money +"$ in the wallet, and " + numberOfTrucks
       + " trucks in garage. " + (firstGarage ? "This file can host the " + lastLoaded + " multiplayer game." : "This file is unable to host the " + lastLoaded + " multiplayer game!") ;
   }
 
