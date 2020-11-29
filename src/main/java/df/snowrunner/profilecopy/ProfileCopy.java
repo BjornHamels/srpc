@@ -62,7 +62,7 @@ public final class ProfileCopy {
         destination.injectProfileFrom(source);
         destination.overwriteSave();
 
-        System.out.println("\n[<3] DONE. Press enter.");
+        System.out.println("\n[<3] DONE. Type something and press enter.");
         scanIn.next();
       } else {
         System.out.format("\n[!!] Aborted (%d!=%d).", i, check);
